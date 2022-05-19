@@ -1,0 +1,21 @@
+{
+  "id": "67c13275-3096-48e8-b8e0-dc9cd553e6ba",
+  "uid": "odio-harum-fugiat",
+  "type": "publication",
+  "data": {
+    "Title": [
+      {
+        "type": "heading2",
+        "text": "Streamline global e-commerce",
+        "spans": []
+      }
+    ],
+    "Content": [
+      {
+        "type": "paragraph",
+        "text": "Nisi duis exercitation pariatur laborum cupidatat ullamco pariatur esse.",
+        "spans": []
+      }
+    ]
+  }
+}
