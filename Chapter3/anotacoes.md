@@ -269,5 +269,14 @@ Headless CMS (Painel de administração + API HTTP , GraphQL, SDK)
 - Utilizando o splice para trazer menos conteudo do prismic
 
 **Gerando previews estáticos**
+- Gerar paginas estaticas durante a build. Para um cenário de 30 categoria ok, mas para 1000 produtos iria demorar muito
+- Gerar a página estática no primeiro acesso.
+- Metade de cada uma das formas de gerar.
+- O getStaticPaths retorna quais previes de posters vamos gerar durante a build
+- O getStaticPaths só existe em páginas que tem parametros dinamicos [param].tsx.
+-  A opção fallback do getStaticPaths pode receber 3 valores, true, false e blocking
+- true: carrega o conteudo pelo lado browser, lado do cliente. Problema com SEO.
+- false: se o post não foi gerado de forma estatica ainda, ele retorna 404. (mais recomendado)
+- blocking: é semelhante ao fallback true, carrega o conteudo novo na camada do next serverSideRender. (mais recomendado)
 
 **Finalização do módulo**

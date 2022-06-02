@@ -68,7 +68,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const prismic = getPrismicClient();
 
   const response = await prismic.getByUID("publication", String(slug), {});
-
+  console.log(response.data.Content);
   const post = {
     slug,
     title: RichText.asText(response.data.Title),
