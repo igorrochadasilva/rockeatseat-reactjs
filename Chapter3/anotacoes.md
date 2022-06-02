@@ -4,9 +4,9 @@
 
 ## 1. Estrutura da aplicação
 
-1. Introdução ao módulo
+**Introdução ao módulo**
 
-2. Fluxo da aplicação
+**Fluxo da aplicação**
 - Stripe -pagamentos
 - FaunaDB - Banco de dados aplicações servelers, rota da aplicação em ambiente isolado.
 - Prismic CMS - CMS
@@ -14,7 +14,7 @@
 - Home -> Autenticação -> inscrição -> Stripe pagamentos -> Salvar informações da inscrição do usuario ->
 FaunaDB <- Consumir posts <- Prismic
 
-3. Fundamentos Next JS
+**Fundamentos Next JS**
 - React a interface e chamadas API é feita pelo JS no browser do cliente
 - SPA: Browser (Cliente) -> Código React(bundle.js) -- Usuários --> Backend(Servidor) -- JSON -->  Código React(bundle.js) -> interface <ul></li></ul>
 - SSR: Browser (Cliente) -> Next.JS (Servidor Node.js) -> Código React(bundle.js) -- produtos --> Backend(Servidor) -- JSON --> Código React(bundle.js) -> interface <ul></li></ul> -> Next.JS (Servidor Node.js) -> Browser (Cliente)
@@ -22,38 +22,38 @@ FaunaDB <- Consumir posts <- Prismic
 - Há muitos motores de busca que não conseguem localizar as páginas por elas serem SPA, páginas construidas pelo browser.
 - Com o advento do NEXTJS, pelo fato da geração da página ser feito do lado do servidor, os motores de busca veem a página inteira construida.
 
-4. Criando estrutura Next.js
+**Criando estrutura Next.js**
 - a pasta pages só pode estar ou na raiz do projeto ou na pasta src.
 
-5. Adicionando Typescript
+**Adicionando Typescript**
 - Instalando typescript e tipagens como dependencia no projeto.
 
-6. Estilizando com SASS
+**Estilizando com SASS**
 - Todo arquivo terminado com module.css é um estilo scooped
 - utilizando sass dentro do next js
 
-7. Configurando fonte externa
+**Configurando fonte externa**
 - Para reproduzir algo em todas as páginas, passar no _app
 - app sempre é executado em todas as páginas
 - _document para conteudo carregando apenas vez
 
-8. Title dinâmico por página
+**Title dinâmico por página**
 - Utilizando o Head para deixar head dinamico em cada página
 
-9. Estilos globais do app
+**Estilos globais do app**
 - criando estilo global.
 
 ## 2. Componentes e páginas
 
-1. Componente: Header
+**Componente: Header**
 - Inserçao do componente html no _app para aparecer em todas as páginas.
 - Desenvolvendo Header componente.
 
-2. Componente: SignInButton
+**Componente: SignInButton**
 - Criação de componente e estilização.
 - Utilizando variavel de login estatico para identificar usuario logado ou deslogado no momento
 
-3. Página Home
+**Página Home**
 - criação e estilização de Home
 
 4. Componente: SubscribeButton
@@ -61,7 +61,7 @@ FaunaDB <- Consumir posts <- Prismic
 
 ## 3. Integração com API
 
-1. Configurando Stripe
+**Configurando Stripe**
 - Stripe é uma companhia tecnológica. Seu software permite a indivíduos e negócios receber pagamentos por internet.
 - https://dashboard.stripe.com/test/dashboard
 - env.local
@@ -69,7 +69,7 @@ FaunaDB <- Consumir posts <- Prismic
 - env.test
 - existe varios env no next, ver documentação do next para mais detalhes
 
-2. Consumindo API do Stripe (SSR)
+**Consumindo API do Stripe (SSR)**
 - Criando chamada para API do Stripe
 - Usando as chamadas de API no formato useEffect ocorre apenas no browser após a interface montada.
 - Fazer chamada no servidor Next utilizando server side rendering
@@ -77,7 +77,7 @@ FaunaDB <- Consumir posts <- Prismic
 - O SSR funciona apenas em PÁGINAS.
 - O getServerSideProps roda no servidor node.
 
-3. Static Site Generation (SSG)
+**Static Site Generation (SSG)**
 - Para páginas com conteudo que não mudam diariamente, utilizar static site generator.
 - Apenas para páginas que o conteudo não muda!
 - 3 formas
@@ -88,7 +88,6 @@ FaunaDB <- Consumir posts <- Prismic
 - Post do blog
 - conteudo SSG
 - comentários (Client-side)
-
 
 # BACK-END NO FRONT-END
 
@@ -169,3 +168,115 @@ FaunaDB <- Consumir posts <- Prismic
 **Evitando duplicação no Stripe**
 - Utilizando FaunaDB para armazenar usuário criado no stripe
 - Feito verificação no fauna para ver se usuário email está cadastrado lá, caso esteja cadastrado, cria checkout session do strip
+
+ ## 4. Ouvindo Webhooks
+ 
+**Webhooks do Stripe**
+- Quando uma aplicação terceira avisa nossa aplicação que algum evento aconteceu.
+- Utilizando o CLI do stripe para fazer o trabalho de weebhooks e informar sobre os eventos ocorridos na aplicação terceira.
+
+**Ouvindo eventos do Stripe**
+- Pegando dados a partir dos eventos do Stripe.
+- Criando função buffer para concatenar chunk e retornar array de chunks.
+- Criando retorno de quais eventos são relevantes que precisamos ouvir.
+
+**Salvando dados do evento**
+- Buscar usuário pelo customerId, necessário criação de indice
+- Salvando subscription no FaunaDB.
+
+**Ouvindo mais eventos**
+- Eventos essenciais que precisamos ouvir: 
+- - customr.subscriptions.created
+- - customer.subscriptions.updated
+- - customer.subscriptions.deleted
+- Ouvindo eventos de stripe para criar e ativar subscription no FaunaDB ou cancelar.
+
+# FRONT-END JAMSTACK
+
+## Trabalhando com CMS
+
+**Escolhendo um CMS**
+JAMStack
+- Javascript 
+- API 
+- Markup
+---------------------------
+CMS (Content Management System)
+- Wordpress 
+x Drupal
+x Joomla
+x Magento (E-commerce)
+
+Headless CMS (Painel de administração + API HTTP , GraphQL, SDK)
+
+- Strapi 
+- Ghost (Blog) Usar para blog, confia
+- Keystone 
+
+- GraphCMS
+- Prismic CMS - a precificação do Prismic é melhor comparado com os outros 2
+- Contentful
+
+- Shopify (Ecommerce) confia
+- Saleor
+
+**Configurando Prismic CMS**
+- Criando novo projeto no prismic.
+- Criando template de posts para utilizar na criação de posts no CMS do prismic.
+- Instalando dependencias.
+- Criando posts com template criado.
+
+**Página: Posts**
+- Criação de página de posts
+- Estilização de página de posts
+
+**Consumindo API do Prismic**
+- Utilizando https://prismic.io/docs
+- Criando service prismic para fazer conexão com API do prismic
+- Utilizando getStaticProps para busca de posts
+
+**Listando posts em tela**
+-  Formatação de dados recebidos de API do prismic, data , preço e ate texto, logo apos consumir os dados da API externa
+- yarn add pismisc-dom para utilizar a função RichText que é um conversor do formato prismic para texto ou html
+
+**Navegação no menu**
+- Quando vc deixa um href com ancora ele recarrega a aplicação inteira novamente.
+- Utilizar o Link do next/link, para utilizar o conceito de SPA, apenas alterando os componentes
+- prop prefetch do Link que deixa a página já carregada antes mesmo de acessar.
+
+**Componente: ActiveLink**
+- useRouter para acessar o asPath que tras a rota atual.
+- Criação de componente ActiveLink para ativar link quando url atual for igual ao href.
+- Utilizando o cloneElement do React para clonar o children e passar a className.
+
+## Páginas estáticas
+**Página: Post**
+- Criando página de Post com parametros dinamicos
+- Toda página que é gerada de forma estática é uma página que não é protegida
+- Utilizando o getServerSideProps para fazer busca do post no prismic e retornar para a página.
+- Utilizando o dangerouslySetInnerHTML para renderizar o content do post que contem html
+
+**Validando assinatura ativa**
+- No nextAuth, utilizado fauna para buscar usuário por email e ver se é inscrito.
+- Apos verificar se usuario está inscrito, retornar session e validar na pagina do post no getServerSideProps se usuario esta inscrito
+- Utilizando o redirect destination do getServerSideProps. (Muito util!)
+- Validando se já não é inscrito no botão subscribe
+
+**Página: Preview do post**
+- Criando pagina de preview.
+- Na pagina de preview, não precisamos verificar se o usuário está inscrito ou não, logo iremos utilizar getStaticProps.
+- Criando estilização de botão de redirect para home e esconder conteudo.
+- Utilizando o splice para trazer menos conteudo do prismic
+
+**Gerando previews estáticos**
+- Gerar paginas estaticas durante a build. Para um cenário de 30 categoria ok, mas para 1000 produtos iria demorar muito
+- Gerar a página estática no primeiro acesso.
+- Metade de cada uma das formas de gerar.
+- O getStaticPaths retorna quais previes de posters vamos gerar durante a build
+- O getStaticPaths só existe em páginas que tem parametros dinamicos [param].tsx.
+-  A opção fallback do getStaticPaths pode receber 3 valores, true, false e blocking
+- true: carrega o conteudo pelo lado browser, lado do cliente. Problema com SEO.
+- false: se o post não foi gerado de forma estatica ainda, ele retorna 404. (mais recomendado)
+- blocking: é semelhante ao fallback true, carrega o conteudo novo na camada do next serverSideRender. (mais recomendado)
+
+**Finalização do módulo**
