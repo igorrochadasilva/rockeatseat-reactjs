@@ -23,5 +23,31 @@
 - Configurando cores no theme.ts
 
 **Configurando fonte**
+- Importação de fonts do google e inserção no theme.tsx
 
 ## 2. Login e dashboard
+
+**Página: Sign in**
+- Criando componente Sign in, estilizando com o chakra ui
+
+**Componente: Input**
+- Criando componente Input para reutilizar quando necessário, interessante o uso do InputProps do chakra ui
+
+**Criando Header**
+- Criando componente Header e estilizando.
+- Instalação de react-icons para utilizar os icones junto com o chakra ui
+
+**Finalizando Header**
+- Utilizando Hstack, Avatar e Box do chakra ui.
+
+**Componente: Sidebar**
+- Criação de componente sidebar e estilização.
+
+**Página: Dashboard**
+- Criação de componente dashboard grid e estilização.
+- Lib Apexchart para graficos
+- Utilizando o dynamic do next js para aplicar o efeito de lazy load no Chart, passando a prop ssr como false
+- false significa que o chart só vai ser carregado pelo lado do browser e nunca do servidor, de modo que o window exista para o chart.
+- https://apexcharts.com/docs/react-charts/
+
+## 3. Controle de usuários
