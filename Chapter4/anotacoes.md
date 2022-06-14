@@ -51,3 +51,64 @@
 - https://apexcharts.com/docs/react-charts/
 
 ## 3. Controle de usuários
+
+**Lista de usuarios**
+- Criação de página de usuários e tabela usando chakra ui
+
+**Componente: Pagination**
+- Criação e estilização de componente com chakra ui
+
+**Página: Form de usuário**
+- Criação e estilização de página criação de usuário com chakra ui
+
+## 4. Responsividade
+
+**Separando componentes**
+- Componentizando os elementos da página, separando em componentes para Header, Sidebar e Pagination
+
+**Responsividade no Chakra**
+- Utilizando o breakPoint do chakra ui para trabalhar com responsividade e a sintaxe de array e possivel object tambem.
+- hook breakPointValue para definir valores a partir do tamanho da tela
+
+**Header responsivo**
+- Utilizando o useBreakpointValue para trabalhar com a responsividade do header
+
+**Sidebar responsiva**
+- Criando contexto para menu drawer e utilizando useDisclosure do chakra ui para controlar eventos do drawer da sidebar
+
+**Dashboard resposivo**
+- Utilizando sintaxe de array de props passadas para componente no dashboard
+
+**Listagem responsiva**
+- Deixando table responsiva
+
+**Cadastro responsivo**
+- Deixando cadastro responsiva
+
+**Fluxo de navegação**
+- Implementando Link do Next para navegação entre páginas
+
+**Sinalizando link ativo**
+- Implementando sinalizar de link ativo utilizando o useRouter, LinkProps e startsWith para identificar inicio de rota
+
+## 5 . Formulários e validação
+
+**Formulários no React**
+- Controled component: monitorar cada campo do formulário e atualizar o estado do componente (mais trabalhosa para muitos campos)
+- Uncontrolled component: Acessar o valor do input somente quando precisar, utilizando o ref.
+- react hook form
+
+**Atualização React Hook Form**
+
+**Form de Altenticação**
+- Utilizando o forwardRef para fazer um encaminhamento da ref passada.
+- Utilizando o reaft hook form
+- Utilizando o formState para verificar o estado do submit
+
+**Validação dos dados**
+- Utilizando o yup para validação de dados atraves de schema. (Muito legal xD )
+
+**Form de criação de usuários**
+- Utilizando o react hook form e yup para validar os campos do formulário e submit o formulário.
+
+**Encerramento do módulo**
