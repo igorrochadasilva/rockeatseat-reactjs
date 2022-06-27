@@ -112,3 +112,57 @@
 - Utilizando o react hook form e yup para validar os campos do formulário e submit o formulário.
 
 **Encerramento do módulo**
+
+
+# Data fetching e cache local
+
+## 1. Conceitos do React Query
+
+**Data fetching no React**
+- Utilizando o React query para busca de dados
+
+**Configurando MirageJS**
+- Configurando mirage js para prover uma api enquanto não temos um backend.
+- Com o "Partial" indica que não necessáriamente precisa ter todos os campos declarados no type.
+
+**Factories e seeds**
+- Utilizando o factories para criação de dados em massa (muito massa : D )
+- Faker, biblioteca de geração de dados ficticios
+
+**Configurando React Query**
+- Configurando o React Query, englobando os componentes com provider dele
+- utilizando useQuery para pegar os dados de determinada rota.
+
+**Listagem de usuários**
+- Listando os usuários com o use Query, atraves do retorno do data.
+- funcionade padrão: stale while revalidate -> obsoleto enquanto revalida, quando a listagem de dados é armazenada em cash
+o react query mostra as versões mais atuais, por baixo dos panos, ele vai revalidar os dados, caso exista versões novas, ele atualiza os dados.
+- revalidade on focus: é feito uma revalidação dos dados, quando o usuário sai da janela e volta.
+
+**Configurando DevTools**
+- Utilizando o ReactQueryDevtools para exibir as querys que foram feitos, que estão em cash, forçar querys e ter uma visão dos estados das querys
+status:
+- stale: obsoleto.
+- fetching: em carregamento.
+- fresh: dados frescos.
+- conseguir controlar os estados que os dados tem dentro da aplicação, essa é a ideia do react query.
+
+## 2. Construinddo aplicação
+
+**Sinalizando refetch dos dados**
+
+**Configurando Axios**
+
+**Criando hook de listagem**
+
+**Lógica de paginação**
+
+**Componente de paginação**
+
+**Trocando de página**
+
+**Prefetch de dados**
+
+**Utilizando mutations**
+
+**SSR no react queruy**
