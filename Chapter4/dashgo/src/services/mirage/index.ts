@@ -1,4 +1,10 @@
-import { createServer, Factory, Model } from "miragejs";
+import {
+  createServer,
+  Factory,
+  Model,
+  Response,
+  ActiveModelSerializer,
+} from "miragejs";
 import { faker } from "@faker-js/faker";
 
 type User = {
@@ -7,39 +13,60 @@ type User = {
   created_at: string;
 };
 
-export function makeServer() {
+export const makeServer = () => {
   const server = createServer({
-    models: {
-      user: Model.extend<Partial<User>>({}),
+    serializers: {
+      application: ActiveModelSerializer,
     },
-    //gerar dados em massa com factories
+
+    models: {
+      user: Model.extend<Partial<User>>({} as User),
+    },
+    // criando dados ficticios com o faker em grande quantidade.
     factories: {
       user: Factory.extend({
-        name(i: number) {
-          return `User ${i + 1}`;
+        name() {
+          return faker.internet.userName();
         },
         email() {
           return faker.internet.email().toLowerCase();
         },
         createdAt() {
-          return faker.date.recent(10);
+          return faker.date.recent();
         },
       }),
     },
 
     seeds(server) {
-      server.createList("user", 10);
+      server.createList("user", 200);
     },
 
     routes() {
       this.namespace = "api";
-      this.timing = 750;
-      this.get("/users");
+      this.timing = 750; // delay para as chamadas retornarem
+      this.get("/users", function (schema, request) {
+        const { page = 1, per_page = 10 } = request.queryParams;
+
+        const total = schema.all("user").length;
+        const pageStart = (Number(page) - 1) * Number(per_page);
+        const pageEnd = pageStart + Number(per_page);
+
+        const users = this.serialize(schema.all("user")).users.slice(
+          pageStart,
+          pageEnd
+        );
+
+        return new Response(200, { "x-total-count": String(total) }, { users });
+      });
+
+      this.get("/users/:id");
       this.post("/users");
+
+      // Reset para não conflitar com o api routes do next
       this.namespace = "";
-      this.passthrough(); //todas as chamadas que forem para o endereço api, passem pelo mirage, e se não for identificado aqui, passem adiante.
+      this.passthrough(); // Como se fosse o next() de um middleware em node, executa o que vem depois
     },
   });
 
   return server;
-}
+};
