@@ -242,6 +242,57 @@
 
 ## 2. Autenticação com JWT
 
+**Contexto de autenticação**
+
+- Criação de contexto de autenticação para disponibilizar para todas as páginas.
+- Contexto de Autenticação disponibilizando:
+- email, senha, e se está logado ou não
+
+**Configurando cliente do axios**
+
+- Instalação de axios e configuração para requisição no backend de autenticação.
+- Utilizando JWT e verificando retorno no site `https://jwt.io/`
+- Configurando `signIn()` do `AuthContext` para envio de email e senha na rota de `/session`
+
+**Salvando dados do usuário**
+
+- Salvando dados do usuário dentro do contexto de auth.
+- Redirecionando o usuário após o login para página de dashboard.
+
+**Salvando tokens nos cookies**
+
+- Instalando `nookies` para salvar cookies do `token` a `refreshtoken`
+- obs: o `nookies` é ideal para aplicações nextjs.
+- Utilizando o `setCookie`, pode receber até 4 parametros, `contexto do cookie`, `cookie name`, `cookie value`, e `opções` como tempo de expirar e rota que pode ter acesso.
+
+**Recuperando estado da autenticação**
+
+- Após o usuário fazer o login estaremos sempre indo buscar com o token armazenado no cookie, as informações do mesmo na rota `/me`.
+
+**Realizando refresh do token**
+
+- Toda vez que o token está expirado, iremos gerar um novo token na chamada Backend
+- Utilizando o `interceptors` do axios, para intercepar a `request` or `response` e executar um código antes ou depois! (LEGAL xD)
+- Com o `interceptors` ìremos pausar as requisições que estão em andamento e que estão ainda virão, para primeiro pegar o token e atualizar, após isso, voltar com as requisições. (Fila de requisições).
+
+**Fila de requisições no Axios**
+
+- Criando fila de requisição, e executandoas somente após o refresh do token. (Hard)
+
+**Realizando logout automático**
+
+- Criado função para deslogar o usuário de modo a destruir os cookies de token e refresh token e redirecionar para login.
+- Qualquer tipo de problema com o refresh token, é deslogado o usuário.
+- Caso o interceptor não caia em nenhuma tratativa, deixar cair no proprio erro do axios para fazer a tratativa.
+
 ## 3. Autenticação com SSR
+
+**Recuperando token no server-side**
+
+**Validando visitante**
+
+**Validanto autenticação (Server)**
+
+**Redirecionamento pelo servidor**
 
 ## 4. Controle de permissões
