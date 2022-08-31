@@ -4,19 +4,18 @@ import { setCookies } from "../utils/cookies";
 import signOut from "../utils/signOut";
 import { AuthTokenError } from "./erros/AuthTokenError";
 
+interface AxiosErrorResponse {
+  code?: string;
+}
+
 let isRefreshing = false;
-let failedRequestQueue: {
+let failedRequestsQueue: {
   onSuccess: (token: string) => void;
   onFailure: (err: AxiosError<unknown, any>) => void;
 }[] = [];
 
-type AxiosErrorResponse = {
-  code?: string;
-};
-
-export const setupAPIClient = (ctx = undefined) => {
+export function setupAPIClient(ctx = undefined) {
   let cookies = parseCookies(ctx);
-
   const api = axios.create({
     baseURL: "http://localhost:3333",
     headers: {
@@ -24,13 +23,14 @@ export const setupAPIClient = (ctx = undefined) => {
     },
   });
 
+  //interceptor
   api.interceptors.response.use(
     (response) => {
       return response;
     },
     (error: AxiosError<AxiosErrorResponse>) => {
-      if (error?.response?.status === 401) {
-        handleRefreshToken(error);
+      if (error.response?.status === 401) {
+        return handleRefreshToken(error);
       }
       return Promise.reject(error);
     }
@@ -47,7 +47,7 @@ export const setupAPIClient = (ctx = undefined) => {
       }
 
       return new Promise((resolve, reject) => {
-        failedRequestQueue.push({
+        failedRequestsQueue.push({
           onSuccess: (token: string) => resolvePromise(token, config, resolve),
           onFailure: (error: AxiosError) => rejectPromise(error, reject),
         });
@@ -74,12 +74,12 @@ export const setupAPIClient = (ctx = undefined) => {
         setCookies("nextAuth.refreshToken", refreshToken, ctx);
 
         api.defaults.headers.common.Authorization = `Bearer ${token}`;
-        failedRequestQueue.forEach((request) => request.onSuccess(token));
-        failedRequestQueue = [];
+        failedRequestsQueue.forEach((request) => request.onSuccess(token));
+        failedRequestsQueue = [];
       })
       .catch((error) => {
-        failedRequestQueue.forEach((request) => request.onFailure(error));
-        failedRequestQueue = [];
+        failedRequestsQueue.forEach((request) => request.onFailure(error));
+        failedRequestsQueue = [];
 
         if (typeof window) {
           signOut();
@@ -106,6 +106,4 @@ export const setupAPIClient = (ctx = undefined) => {
   ) {
     reject(error);
   }
-
-  return api;
-};
+}
