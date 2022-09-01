@@ -5,16 +5,26 @@ import {
 } from "next";
 import { destroyCookie, parseCookies } from "nookies";
 import { AuthTokenError } from "../services/erros/AuthTokenError";
+import decode from "jwt-decode";
+import { validateUserPermissions } from "./validateUserPermissions";
 
-export function withSSRauth<P>(fn: GetServerSideProps<P>) {
+type WithSSRAuthOptions = {
+  permissions?: string[];
+  roles?: string[];
+};
+
+export function withSSRauth<P>(
+  fn: GetServerSideProps<P>,
+  options?: WithSSRAuthOptions
+) {
   return async (
     ctx: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<P>> => {
     const cookies = parseCookies(ctx);
-    const token = cookies["nextAuth.token"];
+    const token = cookies["nextauth.token"];
+
     //valida se token existe
     if (!token) {
-      console.log("token não existe", token);
       return {
         redirect: {
           destination: "/",
@@ -23,13 +33,31 @@ export function withSSRauth<P>(fn: GetServerSideProps<P>) {
       };
     }
 
+    if (options) {
+      const user = decode<{ permissions: string[]; roles: string[] }>(token);
+      const { permissions, roles } = options;
+
+      const userHasValidPermissions = validateUserPermissions({
+        user,
+        permissions,
+        roles,
+      });
+      //caso user não tenha permissão, enviar para dashboard
+      if (!userHasValidPermissions) {
+        return {
+          redirect: {
+            destination: "/dashboard",
+            permanent: false,
+          },
+        };
+      }
+    }
+
     try {
-      console.log("chamou a função");
       return await fn(ctx);
     } catch (err) {
-      console.log("erro com o token", token);
       if (err instanceof AuthTokenError) {
-        destroyCookie(ctx, "nextAuth.token");
+        destroyCookie(ctx, "nextauth.token");
         destroyCookie(ctx, "nextAuth.refresh");
         return {
           redirect: {

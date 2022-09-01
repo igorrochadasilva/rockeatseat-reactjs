@@ -1,26 +1,23 @@
 import axios, { AxiosError, AxiosPromise, AxiosRequestConfig } from "axios";
 import { parseCookies } from "nookies";
+import { signOut } from "../context/AuthContext";
 import { setCookies } from "../utils/cookies";
-import signOut from "../utils/signOut";
 import { AuthTokenError } from "./erros/AuthTokenError";
-
-let isRefreshing = false;
-let failedRequestQueue: {
-  onSuccess: (token: string) => void;
-  onFailure: (err: AxiosError<unknown, any>) => void;
-}[] = [];
 
 type AxiosErrorResponse = {
   code?: string;
 };
 
-export const setupAPIClient = (ctx = undefined) => {
+let isRefreshing = false;
+let failedRequestsQueue = [];
+
+export function setupAPIClient(ctx = undefined) {
   let cookies = parseCookies(ctx);
 
   const api = axios.create({
     baseURL: "http://localhost:3333",
     headers: {
-      Authorization: `Bearer ${cookies["nextAuth.token"]}`,
+      Authorization: `Bearer ${cookies["nextauth.token"]}`,
     },
   });
 
@@ -38,24 +35,25 @@ export const setupAPIClient = (ctx = undefined) => {
 
   function handleRefreshToken(error: AxiosError<AxiosErrorResponse>) {
     if (error.response?.data?.code === "token.expired") {
-      const { "nextAuth.refreshToken": refreshToken } = parseCookies(ctx);
-      const config = error.config;
+      const { "nextauth.refreshToken": refreshToken } = parseCookies(ctx);
+      const originalConfig = error.config;
 
+      //valida se está fazendo o refresh do cookie
       if (!isRefreshing) {
         isRefreshing = true;
         PostRefreshToken(refreshToken);
       }
 
       return new Promise((resolve, reject) => {
-        failedRequestQueue.push({
-          onSuccess: (token: string) => resolvePromise(token, config, resolve),
+        failedRequestsQueue.push({
+          onSuccess: (token: string) =>
+            resolvePromise(token, originalConfig, resolve),
           onFailure: (error: AxiosError) => rejectPromise(error, reject),
         });
       });
     } else {
       // o erro pode não ser do tipo token expirado, portanto o usuário é deslogado
       if (typeof window) {
-        console.log("se estiver no window e o token está expirado");
         // Verifia se está no browser. Ele só faz o logout usando a função signOut, se estiver no cliente(browser).
         signOut();
       } else {
@@ -70,16 +68,16 @@ export const setupAPIClient = (ctx = undefined) => {
       .then((response) => {
         const { token, refreshToken } = response?.data;
 
-        setCookies("nextAuth.token", token);
-        setCookies("nextAuth.refreshToken", refreshToken, ctx);
+        setCookies("nextauth.token", token);
+        setCookies("nextauth.refreshToken", refreshToken, ctx);
 
-        api.defaults.headers.common.Authorization = `Bearer ${token}`;
-        failedRequestQueue.forEach((request) => request.onSuccess(token));
-        failedRequestQueue = [];
+        api.defaults.headers["Authorization"] = `Bearer ${token}`;
+        failedRequestsQueue.forEach((request) => request.onSuccess(token));
+        failedRequestsQueue = [];
       })
       .catch((error) => {
-        failedRequestQueue.forEach((request) => request.onFailure(error));
-        failedRequestQueue = [];
+        failedRequestsQueue.forEach((request) => request.onFailure(error));
+        failedRequestsQueue = [];
 
         if (typeof window) {
           signOut();
@@ -95,7 +93,7 @@ export const setupAPIClient = (ctx = undefined) => {
     config: AxiosRequestConfig,
     resolve: { (value: unknown): void; (arg0: AxiosPromise<any>): void }
   ) {
-    let setupConfig = config.headers?.Authorization;
+    let setupConfig = config.headers["Authorization"];
     setupConfig = `Bearer ${token}`;
     resolve(api(setupConfig));
   }
@@ -108,4 +106,4 @@ export const setupAPIClient = (ctx = undefined) => {
   }
 
   return api;
-};
+}
