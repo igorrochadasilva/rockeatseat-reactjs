@@ -289,10 +289,38 @@
 
 **Recuperando token no server-side**
 
+- Fazer verificação no server side dos cookies para ver se esta logado, caso logado, redirecionar para dashboard, tudo do lado do servidor.
+
 **Validando visitante**
+
+- Criando high order function para garantir que uma página não possa ser acessada por usuário que já está logado. (Conceito insano)
+- Função recebendo outra função ou retornando outra função.
 
 **Validanto autenticação (Server)**
 
+- Validando token na parte do server e autenticando.
+- Criando função high level para englobar server side actions
+
 **Redirecionamento pelo servidor**
 
+- Redirecionando do lado do servidor.
+- Criar respostas para cenários de erro
+
 ## 4. Controle de permissões
+
+**Criando hook de permissão**
+
+- Criação de hook para verificar se há permissão o usuário para acessar conteudo.
+
+**Criando componente de permissão**
+
+- Criando componente para permitir mostrar metricas ou não utilizando o hook useCan().
+
+**Validando permissões (Server)**
+
+- Instalando o jwt-decode para descriptar o token
+- Criando `validateUserPermissions` para validar se usuário tem permissão no lado do servidor
+
+**Broadcast de logout**
+
+- Sempre que o usuário sair do app, deslogar de todas as abas, e enviar para o login utilizando o broadcast. (Irado!)
